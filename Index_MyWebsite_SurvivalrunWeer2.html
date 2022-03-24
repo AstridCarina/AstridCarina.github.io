@@ -1,0 +1,65 @@
+<! –– Wat moet ik aan met survivalruntraining, gemaakt door Astrid Pouwels ––>
+<!DOCTYPE html>
+<html>
+<body style="background-color:#ebfaff;">
+<link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/minty/bootstrap.min.css"
+  /> <!Load stylesheet for style: Minty>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=\, initial-scale=1.0" /> 
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>Wat moet ik aan met survivalrun training?</title>
+<style>
+h3.ex1 {
+  padding-top: 50px;
+}
+</style>
+
+</head>
+<body>
+
+<center><h3 class="ex1">Wat moet ik aan met survivalrun training?</h3></center>
+<center><p>Op dit moment is de gevoelstemperatuur <span id="second"></span><sup>o</sup>C</p></center>
+<center><div><img id="imgCont" src="" alt="" style="width:50%;"/></div></center>
+
+<script>
+n =  new Date();
+y = n.getFullYear();
+m = n.getMonth() + 1;
+d = n.getDate();
+document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+</script>
+
+<script>
+const api_url = 'https://weerlive.nl/api/json-data-10min.php?key=6f5f458f37&locatie=Utrecht';
+const extradun_url = 'https://i.ibb.co/YTzQJJ5/Dia9.png'; 
+const dun_url = 'https://i.ibb.co/RvzhFwY/Dia8.png';	
+const dik_url = 'https://i.ibb.co/SPQmvYn/Dia10.png';
+const extradik_url = 'https://i.ibb.co/jyz7wjD/Dia11.png';
+
+async function getWeer() {
+	const response = await fetch(api_url);
+	const data = await response.json();
+	const {liveweer} = data;
+	var first = liveweer[0,0];
+	var second = first[Object.keys(first)[2]];
+               if (second < 0){
+		document.getElementById('imgCont').src = (extradik_url);
+		}
+		else if (second < 10){
+		document.getElementById('imgCont').src = (dik_url);
+		}
+		else if (second < 25){
+		document.getElementById('imgCont').src = (dun_url);
+		}
+		else {
+		document.getElementById('imgCont').src = (extradun_url);
+		}
+	document.getElementById("second").innerHTML=second;
+}
+getWeer();
+</script>
+</body>
+</html>
