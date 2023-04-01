@@ -92,7 +92,7 @@ async function getWeer() {
 	const data = await response.json();
 	const {liveweer} = data;
 	var first = liveweer[0,0];
-	var second = first[Object.keys(first)[2]];
+	var second = first[Object.keys(first)[4]];
                if (second < 0){
 		document.getElementById('imgCont').src = (extradik_url);
 		}
