@@ -1,152 +1,75 @@
 <!DOCTYPE html>
 <html>
-<body style="background-color:#ebfaff;">
-<link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/minty/bootstrap.min.css"
-  /> <!Load stylesheet for style: Minty>
+
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=\, initial-scale=1.0" /> 
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>Wat moet ik aan met survivalrun training?</title>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: arial;}
-
-
-
-/* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #F1f1f1;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-font-family:arial;
-color: #595959;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ccc;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
-</style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Wat moet ik aan met hardlopen?</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/minty/bootstrap.min.css" />
+	<style>
+		body {
+			font-family: arial;
+		}
+	</style>
 </head>
-<body>
+<body style="background-color:#FFF;">
 
+	<h3>Wat moet ik aan met hardlopen?</h3>
+	<p>Gevoelstemperatuur: <span id="temp"></span>&deg;C</p>
+	<p>Regen: <span id="rain"></span></p>
+	<center><div><img id="imgCont" src="" alt="" style="max-width: 100%;"/></div></center>
 
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'Home')" id="defaultOpen">Home</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Wat is hardlopen?</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Intervaltraining</button>
-</div>
+	<script>
+		const api_url = 'https://weerlive.nl/api/json-data-10min.php?key=6f5f458f37&locatie=Utrecht';
+		const extradun_url = 'https://i.pinimg.com/564x/a9/b0/16/a9b01699fa997579f903673f5aa7c98d.jpg'; 
+		const dun_url = 'https://i.pinimg.com/564x/73/12/69/73126952cab9b352a55adaf35b428208.jpg';	
+		const medium_url = 'https://i.pinimg.com/564x/af/ec/9b/afec9b666f5d2116c08cc2b1eb50d846.jpg';
+		const dik_url = 'https://i.pinimg.com/564x/38/e7/cb/38e7cba23f53b7b66cfbe5f4aacebab1.jpg';
+		const extradik_url = 'https://i.pinimg.com/564x/0b/32/47/0b32473806107d930615bb8c003e1715.jpg';
 
-<div id="Home" class="tabcontent">
+		async function getWeather() {
+			const response = await fetch(api_url);
+			const data = await response.json();
+			const {liveweer} = data;
+			const temperature = liveweer[0].gtemp;
+			const summary = liveweer[0].samenv;
+			const rain = (summary.includes('motregen') || summary.includes('regen')) ? 'Ja' : 'Nee';
+			let imageUrl = '';
+			
+			if (rain === 'Ja') {
+				if (temperature < 7) {
+					imageUrl = extradik_url;
+				} else if (temperature < 15) {
+					imageUrl = dik_url;
+				} else if (temperature < 20) {
+					imageUrl = medium_url;
+				} else if (temperature < 23) {
+					imageUrl = dun_url;
+				} else {
+					imageUrl = extradun_url;
+				}
+			} else {
+				if (temperature < 0) {
+					imageUrl = extradik_url;
+				} else if (temperature < 5) {
+					imageUrl = dik_url;
+				} else if (temperature < 10) {
+					imageUrl = medium_url;
+				} else if (temperature < 15) {
+					imageUrl = dun_url;
+				} else {
+					imageUrl = extradun_url;
+				}
+				}
 
-<center><h3 class="ex1">Wat moet ik aan met hardlopen?</h3></center>
-<center><p>Op dit moment is de gevoelstemperatuur <span id="second"></span><sup>o</sup>C</p></center>
-<center><div><img id="imgCont" src="" alt="" style="max-width: 100%;"/></div></center>
-
-<script>
-n =  new Date();
-y = n.getFullYear();
-m = n.getMonth() + 1;
-d = n.getDate();
-document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
-</script>
-
-<script>
-const api_url = 'https://weerlive.nl/api/json-data-10min.php?key=6f5f458f37&locatie=Utrecht';
-const extradun_url = 'https://i.pinimg.com/564x/a9/b0/16/a9b01699fa997579f903673f5aa7c98d.jpg'; 
-const dun_url = 'https://i.pinimg.com/564x/73/12/69/73126952cab9b352a55adaf35b428208.jpg';	
-const medium_url = 'https://i.pinimg.com/564x/af/ec/9b/afec9b666f5d2116c08cc2b1eb50d846.jpg';
-const dik_url = 'https://i.pinimg.com/564x/38/e7/cb/38e7cba23f53b7b66cfbe5f4aacebab1.jpg';
-const extradik_url = 'https://i.pinimg.com/564x/0b/32/47/0b32473806107d930615bb8c003e1715.jpg';
-
-
-async function getWeer() {
-	const response = await fetch(api_url);
-	const data = await response.json();
-	const {liveweer} = data;
-	var first = liveweer[0,0];
-	var second = first[Object.keys(first)[2]];
-               if (second < 0){
-		document.getElementById('imgCont').src = (extradik_url);
+			document.getElementById('temp').innerHTML = temperature;
+			document.getElementById('rain').innerHTML = /motregen|lichte motregen|dichte motregen|lichte motregen en regen|droog na motregen|motregen en regen|af en toe lichte regen|lichte regen|regen|droog na regen/i.test(summary) ? 'Ja' : 'Nee';
+			document.getElementById('imgCont').src = imageUrl;
 		}
-		else if (second < 5){
-		document.getElementById('imgCont').src = (dik_url);
-		}
-		else if (second < 10){
-		document.getElementById('imgCont').src = (medium_url);
-		}
-		else if (second < 15){
-		document.getElementById('imgCont').src = (dun_url);
-		}
-		else {
-		document.getElementById('imgCont').src = (extradun_url);
-		}
-	document.getElementById("second").innerHTML=second;
-}
-getWeer();
-</script>
-</div>
+		getWeather();
+	</script>
 
-<div id="Paris" class="tabcontent">
-  <h3>Wat is hardlopen?</h3>
-  <p> 
-
-</p> 
-</div>
-
-<div id="Tokyo" class="tabcontent">
-<h3>Hardloopschoenen</h3>
-  
-</p>
-</div>
-
-<script>
-function openCity(evt, cityName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
-</script>
-   
 </body>
-</html> 
+</html>
